@@ -4,5 +4,6 @@
     "js-import.codeCompletionAction": false,
     "js-import.filesToScan": "**/*.{jsx,tsx,js,ts}",
     "csscomb.formatOnSave": true,
-    "csscomb.preset": "yandex"
+    "csscomb.preset": "yandex",
+    "eslint.autoFixOnSave": true
 }
