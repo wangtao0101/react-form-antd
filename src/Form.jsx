@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import 'antd/lib/form/style/css';
 // import rules from './rules';
+import classNames from 'classnames';
 
 export default class Form extends Component {
     static childContextTypes = {
         register: PropTypes.func.isRequired,
         unregister: PropTypes.func.isRequired,
+        vertical: PropTypes.bool,
         // validateState: PropTypes.func.isRequired,
         // errors: PropTypes.objectOf(PropTypes.array),
         // validateError: PropTypes.objectOf(PropTypes.any),
@@ -27,6 +29,7 @@ export default class Form extends Component {
         return {
             register: this.register,
             unregister: this.unregister,
+            vertical: this.props.layout === 'vertical',
             // validateState: this.validateState,
             // components: this.components,
             // errors: this.state.errors,
@@ -134,14 +137,32 @@ export default class Form extends Component {
     // };
 
     render() {
+        const { prefixCls, layout, children, className, ...restProps } = this.props;
+
+        const formClassName = classNames(prefixCls, {
+            [`${prefixCls}-horizontal`]: layout === 'horizontal',
+            [`${prefixCls}-vertical`]: layout === 'vertical',
+            [`${prefixCls}-inline`]: layout === 'inline',
+            // [`${prefixCls}-hide-required-mark`]: hideRequiredMark,
+        }, className);
+
         return (
-            <form {...this.props}>
-                {this.props.children}
+            <form {...restProps} className={formClassName}>
+                {children}
             </form>
         );
     }
 }
 
+Form.defaultProps = {
+    prefixCls: 'ant-form',
+    layout: 'horizontal',
+    className: {},
+};
+
 Form.propTypes = {
-    children: PropTypes.element.isRequired,
+    children: PropTypes.array.isRequired,
+    prefixCls: PropTypes.string,
+    layout: PropTypes.oneOf(['horizontal', 'inline', 'vertical']),
+    className: PropTypes.object,
 };
