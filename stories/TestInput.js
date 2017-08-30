@@ -20,13 +20,27 @@ export default class TestInput extends React.Component { // eslint-disable-line
         return (
             <div>
                 <Form style={{ width: '600px' }}>
-                    <FormItem label="Username:" id="username" {...formItemLayout}>
+                    <FormItem label="Username:"id="username" {...formItemLayout} value="wang tao">
                         <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="Username" />
                     </FormItem>
-                    <FormItem label="Password:" id="password" hasFeedback validateStatus="success" {...formItemLayout}>
+                    <FormItem
+                        label="Password:"
+                        id="password"
+                        hasFeedback
+                        validateStatus="success"
+                        {...formItemLayout}
+                        value="my password"
+                    >
                         <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} placeholder="Password" type="password" />
                     </FormItem>
-                    <FormItem label="Email:" id="email" hasFeedback validateStatus="error" {...formItemLayout}>
+                    <FormItem
+                        label="Email:"
+                        id="email"
+                        hasFeedback
+                        validateStatus="error"
+                        {...formItemLayout}
+                        value="my@163.com"
+                    >
                         <Input prefix={<Icon type="mail" style={{ fontSize: 13 }} />} placeholder="Email" type="email" />
                     </FormItem>
                 </Form>
@@ -34,3 +48,45 @@ export default class TestInput extends React.Component { // eslint-disable-line
         );
     }
 }
+
+// import { Form, Card, Input, Row, Col } from 'antd';
+
+// class MyForm extends React.Component { // eslint-disable-line
+//     render() {
+//         console.log('asdfadfs');
+//         const names = ['A', 'B', 'C', 'D', 'E', 'F'];
+//         const inputCount = 20;
+//         const formItemLayout = {
+//             labelCol: { span: 4 },
+//             wrapperCol: { span: 20 },
+//         };
+//         const subForms = names.map((name) => {
+//             const fields = Array.from(Array(inputCount).keys()).map((key) => {
+//                 const { getFieldDecorator } = this.props.form; // eslint-disable-line
+//                 return (
+//                     <Row key={key}>
+//                         <Form.Item label={`${name}-${key}`} {...formItemLayout}>
+//                             {getFieldDecorator(`${name}-${key}`)(<Input />)}
+//                         </Form.Item>
+//                     </Row>
+//                 );
+//             });
+//             return (
+//                 <Col span={4} key={name}>
+//                     <Card title={`Form${name}`}>
+//                         {fields}
+//                     </Card>
+//                 </Col>
+//             );
+//         });
+//         return (
+//             <Form>
+//                 <Row gutter={8}>
+//                     {subForms}
+//                 </Row>
+//             </Form>
+//         );
+//     }
+// }
+
+// export default Form.create()(MyForm);

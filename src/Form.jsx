@@ -73,16 +73,16 @@ export default class Form extends Component {
     // }, {});
 
     register = (component) => {
-        this.components[component.props.name] = component;
+        this.components[component.props.id] = component;
     };
 
     unregister = (component) => {
-        const errors = Object.assign({}, this.state.errors);
+        // const errors = Object.assign({}, this.state.errors);
 
-        delete this.components[component.props.name];
-        delete errors[component.props.name];
+        delete this.components[component.props.id];
 
-        this.setState({ errors });
+        // delete errors[component.props.id];
+        // this.setState({ errors });
     };
 
     // validateState = () => {

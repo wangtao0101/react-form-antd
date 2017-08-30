@@ -14,39 +14,35 @@ export default class FormItem extends React.Component {
         // validateError: PropTypes.objectOf(PropTypes.any),
     };
 
-    componentWillReceiveProps(_nextProps) {
-        // if (nextProps.value !== this.props.value) {
-        //     this.setState({
-        //         value: nextProps.value,
-        //         isChanged: true,
-        //     }, () => {
-        //         this.context.validateState(this.props.name);
-        //     });
-        // }
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+            value: this.props.value,
+        };
+
+        context.register(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.value !== this.props.value) {
+            this.setState({
+                value: nextProps.value,
+            });
+        }
     }
 
     componentWillUnmount() {
         this.context.unregister(this);
     }
 
-    // onChange = (event) => {
-    //     // TODO: Refactor conditions
-    //     const isChecked = this.state.isCheckbox ? !this.state.isChecked : true;
-    //     const checkboxValue = isChecked ? event.target.value : '';
-    //     const value = this.state.isCheckbox ? checkboxValue : event.target.value;
+    onChange = (event) => {
+        const value = event.target.value;
 
-    //     event.persist();
-
-    //     this.setState({
-    //         value,
-    //         isChanged: true,
-    //         isChecked,
-    //     }, () => {
-    //         this.context.validateState(this.props.name);
-
-    //         (this.props.onChange || noop)(event);
-    //     });
-    // };
+        this.setState({
+            value,
+        });
+    };
 
     // onBlur = (event) => {
     //     event.persist();
@@ -71,9 +67,7 @@ export default class FormItem extends React.Component {
         });
 
         let labelChildren = label;
-        // Keep label is original where there should have no colon
         const haveColon = colon && !context.vertical;
-        // Remove duplicated user input colon
         if (haveColon && typeof label === 'string' && label.trim() !== '') {
             labelChildren = label.replace(/[：|:]\s*$/, '');
         }
@@ -93,6 +87,7 @@ export default class FormItem extends React.Component {
 
     render() {
         const { prefixCls, label, wrapperCol, children, id, hasFeedback, style } = this.props;
+        const { value } = this.state;
 
         /* TODO: get validate status */
         const validateStatus = this.props.validateStatus;
@@ -110,7 +105,7 @@ export default class FormItem extends React.Component {
             <Row className={`${prefixCls}-item`} style={style}>
                 {this.renderLabel(label)}
                 <Col className={className} {...wrapperCol}>
-                    {React.cloneElement(children, { size: 'large', id })}
+                    {React.cloneElement(children, { size: 'large', id, value, onChange: this.onChange })}
                 </Col>
             </Row>
         );
@@ -139,6 +134,7 @@ FormItem.propTypes = {
     hasFeedback: PropTypes.bool,
     validateStatus: PropTypes.oneOf(['', 'success', 'warning', 'error', 'validating']),
     style: PropTypes.object,
+    value: PropTypes.any.isRequired,
     // value: PropTypes.string.isRequired,
     // name: PropTypes.string.isRequired,
     // onChange: PropTypes.func,
