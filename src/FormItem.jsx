@@ -60,7 +60,7 @@ export default class FormItem extends React.Component {
     render() {
         return (
             <div className="ant-form-item-control has-feedback has-success">
-                { React.cloneElement(this.props.children) }
+                { React.cloneElement(this.props.children, { size: 'large' }) }
             </div>
         );
     }
