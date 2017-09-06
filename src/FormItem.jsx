@@ -121,6 +121,7 @@ FormItem.defaultProps = {
     hasFeedback: false,
     validateStatus: undefined,
     style: {},
+    value: '',
 };
 
 FormItem.propTypes = {
@@ -134,7 +135,7 @@ FormItem.propTypes = {
     hasFeedback: PropTypes.bool,
     validateStatus: PropTypes.oneOf(['', 'success', 'warning', 'error', 'validating']),
     style: PropTypes.object,
-    value: PropTypes.any.isRequired,
+    value: PropTypes.any,
     // value: PropTypes.string.isRequired,
     // name: PropTypes.string.isRequired,
     // onChange: PropTypes.func,

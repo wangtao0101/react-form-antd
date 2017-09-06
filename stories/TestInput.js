@@ -31,7 +31,11 @@ export default class TestInput extends React.Component { // eslint-disable-line
                         {...formItemLayout}
                         value="my password"
                     >
-                        <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} placeholder="Password" type="password" />
+                        <Input
+                            prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
+                            placeholder="Password"
+                            type="password"
+                        />
                     </FormItem>
                     <FormItem
                         label="Email:"
@@ -41,7 +45,11 @@ export default class TestInput extends React.Component { // eslint-disable-line
                         {...formItemLayout}
                         value="my@163.com"
                     >
-                        <Input prefix={<Icon type="mail" style={{ fontSize: 13 }} />} placeholder="Email" type="email" />
+                        <Input
+                            prefix={<Icon type="mail" style={{ fontSize: 13 }} />}
+                            placeholder="Email"
+                            type="email"
+                        />
                     </FormItem>
                 </Form>
             </div>
