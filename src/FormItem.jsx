@@ -101,13 +101,17 @@ export default class FormItem extends React.Component {
             'is-validating': validateStatus === 'validating',
         });
 
-        return (
+        return label ? (
             <Row className={`${prefixCls}-item`} style={style}>
-                {this.renderLabel(label)}
+                {this.renderLabel()}
                 <Col className={className} {...wrapperCol}>
                     {React.cloneElement(children, { size: 'large', id, value, onChange: this.onChange })}
                 </Col>
             </Row>
+        ) : (
+            <div className={className}>
+                {React.cloneElement(children, { size: 'large', id, value, onChange: this.onChange })}
+            </div>
         );
     }
 }

@@ -51,6 +51,18 @@ export default class TestInput extends React.Component { // eslint-disable-line
                             type="email"
                         />
                     </FormItem>
+                    <FormItem
+                        id="email"
+                        hasFeedback
+                        validateStatus="error"
+                        value="my@163.com"
+                    >
+                        <Input
+                            prefix={<Icon type="mail" style={{ fontSize: 13 }} />}
+                            placeholder="Email"
+                            type="email"
+                        />
+                    </FormItem>
                 </Form>
             </div>
         );
