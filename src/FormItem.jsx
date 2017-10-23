@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Col, Row } from 'antd';
+import { getValueFromEvent, normalizeValidateTrigger } from './utils';
 
 export default class FormItem extends React.Component {
     static contextTypes = {
@@ -36,29 +37,23 @@ export default class FormItem extends React.Component {
         this.context.unregister(this);
     }
 
-    onChange = (event) => {
-        const value = event.target.value;
+    onCollect = (event) => {
+        const value = getValueFromEvent(event);
 
         this.setState({
             value,
         });
     };
 
-    // onBlur = (event) => {
-    //     event.persist();
-
-    //     this.setState({
-    //         isUsed: true,
-    //     }, () => {
-    //         this.context.validateState(this.props.name);
-
-    //         (this.props.onBlur || noop)(event);
-    //     });
-    // };
+    onValidate = (value) => {
+        console.log(value); // eslint-disable-line
+    }
 
     renderLabel = () => {
         const { label, labelCol, prefixCls, colon, id } = this.props;
         const context = this.context;
+
+        /* TODO: get require rule */
         // const required = this.isRequired();
         const required = true;
 
@@ -86,7 +81,8 @@ export default class FormItem extends React.Component {
     }
 
     render() {
-        const { prefixCls, label, wrapperCol, children, id, hasFeedback, style } = this.props;
+        const { prefixCls, label, wrapperCol, children, id, hasFeedback, style, trigger, valuePropName } = this.props;
+        const validateTrigger = normalizeValidateTrigger(this.props.validateTrigger).filter(tr => tr !== trigger);
         const { value } = this.state;
 
         /* TODO: get validate status */
@@ -101,16 +97,26 @@ export default class FormItem extends React.Component {
             'is-validating': validateStatus === 'validating',
         });
 
+        const childrenProps = {
+            size: 'large',
+            id,
+        };
+
+        childrenProps[valuePropName] = value;
+        childrenProps[trigger] = this.onCollect;
+
+        validateTrigger.forEach((tr) => { childrenProps[tr] = this.onValidate; });
+
         return label ? (
             <Row className={`${prefixCls}-item`} style={style}>
                 {this.renderLabel()}
                 <Col className={className} {...wrapperCol}>
-                    {React.cloneElement(children, { size: 'large', id, value, onChange: this.onChange })}
+                    {React.cloneElement(children, childrenProps)}
                 </Col>
             </Row>
         ) : (
             <div className={className}>
-                {React.cloneElement(children, { size: 'large', id, value, onChange: this.onChange })}
+                {React.cloneElement(children, childrenProps)}
             </div>
         );
     }
@@ -126,6 +132,10 @@ FormItem.defaultProps = {
     validateStatus: undefined,
     style: {},
     value: '',
+    trigger: 'onChange',
+    valuePropName: 'value',
+    getValueFromEvent,
+    validateTrigger: undefined,
 };
 
 FormItem.propTypes = {
@@ -140,8 +150,27 @@ FormItem.propTypes = {
     validateStatus: PropTypes.oneOf(['', 'success', 'warning', 'error', 'validating']),
     style: PropTypes.object,
     value: PropTypes.any,
+    trigger: PropTypes.string,
+    valuePropName: PropTypes.string,
+    getValueFromEvent: PropTypes.func,
+    validateTrigger: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string),
+    ]),
     // value: PropTypes.string.isRequired,
     // name: PropTypes.string.isRequired,
     // onChange: PropTypes.func,
     // onBlur: PropTypes.func
+    /**
+     * to do props
+     * (done) valuePropName 子节点的值的属性，如 Switch 的是 'checked' string 'value'
+       (no need) initialValue 子节点的初始值，类型、可选值均由子节点决定(注意：由于内部校验时使用 === 判断是否变化，建议使用变量缓存所需设置的值而非直接使用字面量))
+       (done) trigger 收集子节点的值的时机 string 'onChange'
+       (done) getValueFromEvent 可以把 onChange 的参数（如 event）转化为控件的值 function(..args) reference
+       (done) validateTrigger 校验子节点值的时机 string|string[] 'onChange'
+       rules 校验规则，参考下方文档 object[]
+       validateFirst 当某一规则校验不通过时，是否停止剩下的规则的校验 boolean false
+       exclusive 是否和其他控件互斥，特别用于 Radio 单选控件 boolean false
+       normalize 转换默认的 value 给控件，一个选择全部的例子 function(value, prevValue, allValues): any -
+     */
 };

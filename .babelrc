@@ -16,9 +16,4 @@
         ]
       ],
     ],
-    "env": {
-        "development": {
-            "sourceMaps" : "inline",
-        },
-    }
 }

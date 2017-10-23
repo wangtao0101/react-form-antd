@@ -20,7 +20,7 @@ export default class TestInput extends React.Component { // eslint-disable-line
         return (
             <div>
                 <Form style={{ width: '600px' }}>
-                    <FormItem label="Username:"id="username" {...formItemLayout} value="wang tao">
+                    <FormItem label="Username:" id="username" {...formItemLayout} value="wang tao">
                         <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="Username" />
                     </FormItem>
                     <FormItem
