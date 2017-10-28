@@ -32,7 +32,7 @@
     "react-dom": "^15.6.1"
   },
   "scripts": {
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006 -h 127.0.0.1",
     "build-storybook": "build-storybook",
     "deploy": "npm run build-storybook && gh-pages -d storybook-static",
     "build": "cross-env NODE_ENV=production babel src -d lib --ignore test",

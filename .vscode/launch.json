@@ -1,0 +1,20 @@
+{
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "name": "Attach",
+            "type": "chrome",
+            "request": "attach",
+            "port": 9222,
+            "urlFilter": "http://127.0.0.1:6006/*",
+            "webRoot": "${workspaceRoot}",
+            "sourceMapPathOverrides": {
+                // "webpack:///./~/*": "${webRoot}/node_modules/*",       // Example: "webpack:///./~/querystring/index.js" -> "/Users/me/project/node_modules/querystring/index.js"
+                // "webpack:///./*":   "${webRoot}/*",                    // Example: "webpack:///./src/app.js" -> "/users/me/project/src/app.js",
+                // "webpack:///*":     "*",                               // Example: "webpack:///C:/project/app.ts" -> "C:/project/app.ts"
+                // "webpack:///src/*": "${webRoot}/src/*"                    // Example: "webpack:///src/App.js" -> "C:/project/src/App.js"
+                "webpack:///*": "${webRoot}/*"                    // Example: "webpack:///src/App.js" -> "C:/project/src/App.js"
+            }
+        }
+    ]
+}

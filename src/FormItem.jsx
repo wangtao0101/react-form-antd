@@ -82,7 +82,6 @@ export default class FormItem extends React.Component {
 
     render() {
         const { prefixCls, label, wrapperCol, children, id, hasFeedback, style, trigger, valuePropName } = this.props;
-        const validateTrigger = normalizeValidateTrigger(this.props.validateTrigger).filter(tr => tr !== trigger);
         const { value } = this.state;
 
         /* TODO: get validate status */
@@ -105,6 +104,7 @@ export default class FormItem extends React.Component {
         childrenProps[valuePropName] = value;
         childrenProps[trigger] = this.onCollect;
 
+        const validateTrigger = normalizeValidateTrigger(this.props.validateTrigger).filter(tr => tr !== trigger);
         validateTrigger.forEach((tr) => { childrenProps[tr] = this.onValidate; });
 
         return label ? (
