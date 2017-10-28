@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import 'antd/lib/form/style/css';
 // import rules from './rules';
 import classNames from 'classnames';
+import invariant from 'invariant';
 
 export default class Form extends Component {
     static childContextTypes = {
@@ -73,6 +74,9 @@ export default class Form extends Component {
     // }, {});
 
     register = (component) => {
+        invariant(typeof component.props.id === 'string', 'should add id props for FormItem');
+        invariant(this.components[component.props.id] === undefined,
+            'id props of all FormItems in same Form should be unique');
         this.components[component.props.id] = component;
     };
 
@@ -161,7 +165,7 @@ Form.defaultProps = {
 };
 
 Form.propTypes = {
-    children: PropTypes.array.isRequired,
+    children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]).isRequired,
     prefixCls: PropTypes.string,
     layout: PropTypes.oneOf(['horizontal', 'inline', 'vertical']),
     className: PropTypes.object,
