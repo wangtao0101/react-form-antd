@@ -1,11 +1,11 @@
 {
-  "name": "react-list-any-height",
+  "name": "react-form-antd",
   "version": "0.3.0",
-  "description": "react-list-any-height",
+  "description": "react-form-antd",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wangtao0101/react-list-any-height.git"
+    "url": "git+https://github.com/wangtao0101/react-form-antd.git"
   },
   "peerDependencies": {
     "react": "^15.3.0 || ^16.0.0-alpha",
