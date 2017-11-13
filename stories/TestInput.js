@@ -52,9 +52,12 @@ export default class TestInput extends React.Component { // eslint-disable-line
                         />
                     </FormItem>
                     <FormItem
-                        id="email"
+                        id="email2"
                         hasFeedback
-                        validateStatus="error"
+                        rules={[{
+                            name: 'required',
+                            message: 'email is required',
+                        }]}
                         value="my@163.com"
                     >
                         <Input

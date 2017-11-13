@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Col, Row } from 'antd';
 import { getValueFromEvent, normalizeValidateTrigger } from './utils';
+import rules from './rules';
 
 export default class FormItem extends React.Component {
     static contextTypes = {
         register: PropTypes.func.isRequired,
         unregister: PropTypes.func.isRequired,
         vertical: PropTypes.bool,
-        // validateState: PropTypes.func.isRequired,
+        validateState: PropTypes.func.isRequired,
         // components: PropTypes.objectOf(PropTypes.any),
         // errors: PropTypes.objectOf(PropTypes.array),
         // validateError: PropTypes.objectOf(PropTypes.any),
@@ -20,6 +21,7 @@ export default class FormItem extends React.Component {
 
         this.state = {
             value: this.props.value,
+            validateStatus: undefined,
         };
 
         context.register(this);
@@ -39,10 +41,7 @@ export default class FormItem extends React.Component {
 
     onCollect = (event) => {
         const value = getValueFromEvent(event);
-
-        this.setState({
-            value,
-        });
+        this.context.validateState(this.props.id, value, this.props.rules);
     };
 
     onValidate = (value) => {
@@ -84,8 +83,7 @@ export default class FormItem extends React.Component {
         const { prefixCls, label, wrapperCol, children, id, hasFeedback, style, trigger, valuePropName } = this.props;
         const { value } = this.state;
 
-        /* TODO: get validate status */
-        const validateStatus = this.props.validateStatus;
+        const validateStatus = this.props.validateStatus || this.state.validateStatus;
 
         const className = classNames({
             [`${prefixCls}-item-control`]: true,
@@ -136,6 +134,7 @@ FormItem.defaultProps = {
     valuePropName: 'value',
     getValueFromEvent,
     validateTrigger: undefined,
+    rules: [],
 };
 
 FormItem.propTypes = {
@@ -157,6 +156,7 @@ FormItem.propTypes = {
         PropTypes.string,
         PropTypes.arrayOf(PropTypes.string),
     ]),
+    rules: PropTypes.array,
     // value: PropTypes.string.isRequired,
     // name: PropTypes.string.isRequired,
     // onChange: PropTypes.func,

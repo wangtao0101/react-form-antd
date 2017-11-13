@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import 'antd/lib/form/style/css';
-// import rules from './rules';
 import classNames from 'classnames';
 import invariant from 'invariant';
+import rules from './rules';
 
 export default class Form extends Component {
     static childContextTypes = {
         register: PropTypes.func.isRequired,
         unregister: PropTypes.func.isRequired,
         vertical: PropTypes.bool,
-        // validateState: PropTypes.func.isRequired,
+        validateState: PropTypes.func.isRequired,
         // errors: PropTypes.objectOf(PropTypes.array),
         // validateError: PropTypes.objectOf(PropTypes.any),
     };
@@ -31,7 +31,7 @@ export default class Form extends Component {
             register: this.register,
             unregister: this.unregister,
             vertical: this.props.layout === 'vertical',
-            // validateState: this.validateState,
+            validateState: this.validateState,
             // components: this.components,
             // errors: this.state.errors,
             // validateError: this.state.validateError,
@@ -89,12 +89,24 @@ export default class Form extends Component {
         // this.setState({ errors });
     };
 
-    // validateState = () => {
-    //     const errors = this.getErrors();
-    //     const validateError = this.getValidationError();
+    validateState = (name, value, validateRules) => {
+        let validateStatus;
+        for (let i = 0; i < validateRules.length; i += 1) {
+            const rule = validateRules[i];
+            if (rules[rule.name]) {
+                const status = rules[rule.name](value);
+                if (status) {
+                    validateStatus = 'error';
+                    break;
+                }
+            }
+        }
 
-    //     this.setState({ errors, validateError });
-    // };
+        this.components[name].setState({
+            value,
+            validateStatus,
+        });
+    }
 
     // validate = (name) => {
     //     this.components[name].setState({
