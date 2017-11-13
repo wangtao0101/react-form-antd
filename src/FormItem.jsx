@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Col, Row } from 'antd';
 import { getValueFromEvent, normalizeValidateTrigger } from './utils';
-import rules from './rules';
 
 export default class FormItem extends React.Component {
     static contextTypes = {
@@ -44,8 +43,8 @@ export default class FormItem extends React.Component {
         this.context.validateState(this.props.id, value, this.props.rules);
     };
 
-    onValidate = (value) => {
-        console.log(value); // eslint-disable-line
+    onValidate = (event) => {
+        console.log(event); // eslint-disable-line
     }
 
     renderLabel = () => {

@@ -59,11 +59,13 @@ export default class TestInput extends React.Component { // eslint-disable-line
                             message: 'email is required',
                         }]}
                         value="my@163.com"
+                        validateTrigger="onBlur"
                     >
                         <Input
                             prefix={<Icon type="mail" style={{ fontSize: 13 }} />}
                             placeholder="Email"
                             type="email"
+                            onBlur={() => alert('safadf')} // eslint-disable-line
                         />
                     </FormItem>
                 </Form>
