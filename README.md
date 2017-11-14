@@ -7,7 +7,7 @@ An easy form component based on ant design.
 ## Roadmap, available Component in ant design:
 - [x] Input
 - [x] TextArea
-- [ ] InputNumber
+- [x] InputNumber
 - [ ] Select
 - [ ] Button
 - [ ] AutoComplete

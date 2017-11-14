@@ -62,7 +62,7 @@ export default class TestInput extends React.Component { // eslint-disable-line
                                 if (value.length > 5) {
                                     return 'too long';
                                 }
-                                return '';
+                                return null;
                             },
                         }]}
                         value=""

@@ -19,7 +19,7 @@ export default class TestTextArea extends React.Component { // eslint-disable-li
                                 if (value.length > 5) {
                                     return 'too long';
                                 }
-                                return '';
+                                return null;
                             },
                         }]}
                         value=""
