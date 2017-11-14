@@ -1,5 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
+import 'antd/lib/form/style/css';
 
 import TestInput from './TestInput';
 import TestLayout from './TestLayout';

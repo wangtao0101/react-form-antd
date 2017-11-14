@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import invariant from 'invariant';
 
-import 'antd/lib/form/style/css';
-
 export default class Form extends Component {
     static childContextTypes = {
         register: PropTypes.func.isRequired,
@@ -96,7 +94,7 @@ Form.defaultProps = {
 };
 
 Form.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]).isRequired,
+    children: PropTypes.any.isRequired,
     prefixCls: PropTypes.string,
     layout: PropTypes.oneOf(['horizontal', 'inline', 'vertical']),
     className: PropTypes.object,
