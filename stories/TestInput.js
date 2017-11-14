@@ -49,6 +49,7 @@ export default class TestInput extends React.Component { // eslint-disable-line
                             prefix={<Icon type="mail" style={{ fontSize: 13 }} />}
                             placeholder="Email"
                             type="email"
+                            size="small"
                         />
                     </FormItem>
                     <FormItem

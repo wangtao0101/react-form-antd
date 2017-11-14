@@ -149,7 +149,6 @@ export default class FormItem extends React.Component {
         });
 
         const childrenProps = {
-            size: 'large',
             id,
         };
 
