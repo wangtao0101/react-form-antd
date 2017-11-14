@@ -5,8 +5,8 @@
 An easy form component based on ant design.
 
 ## Roadmap, available Component in ant design:
-- [ ] Input
-- [ ] TextArea
+- [x] Input
+- [x] TextArea
 - [ ] InputNumber
 - [ ] Select
 - [ ] Button

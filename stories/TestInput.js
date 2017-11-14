@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Icon } from 'antd';
+import { Input, Icon, Button } from 'antd';
 
 import Form from '../src/Form';
 import FormItem from '../src/FormItem';
@@ -19,7 +19,7 @@ export default class TestInput extends React.Component { // eslint-disable-line
 
         return (
             <div>
-                <Form style={{ width: '600px' }}>
+                <Form style={{ width: '600px' }} ref={(form) => { this.form = form; }}>
                     <FormItem label="Username:" id="username" {...formItemLayout} value="wang tao">
                         <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="Username" />
                     </FormItem>
@@ -57,61 +57,32 @@ export default class TestInput extends React.Component { // eslint-disable-line
                         rules={[{
                             name: 'required',
                             message: 'email is required',
+                        }, {
+                            validator: (value) => {
+                                if (value.length > 5) {
+                                    return 'too long';
+                                }
+                                return '';
+                            },
                         }]}
-                        value="my@163.com"
+                        value=""
                         validateTrigger="onBlur"
                     >
                         <Input
                             prefix={<Icon type="mail" style={{ fontSize: 13 }} />}
                             placeholder="Email"
                             type="email"
-                            onBlur={() => alert('safadf')} // eslint-disable-line
+                            onChange={() => console.log('safadf')} // eslint-disable-line
                         />
                     </FormItem>
+                    <Button
+                        onClick={() => {
+                            this.form.validate();
+                            console.log(this.form.getValue()); // eslint-disable-line
+                        }}
+                    >verify</Button>
                 </Form>
             </div>
         );
     }
 }
-
-// import { Form, Card, Input, Row, Col } from 'antd';
-
-// class MyForm extends React.Component { // eslint-disable-line
-//     render() {
-//         console.log('asdfadfs');
-//         const names = ['A', 'B', 'C', 'D', 'E', 'F'];
-//         const inputCount = 20;
-//         const formItemLayout = {
-//             labelCol: { span: 4 },
-//             wrapperCol: { span: 20 },
-//         };
-//         const subForms = names.map((name) => {
-//             const fields = Array.from(Array(inputCount).keys()).map((key) => {
-//                 const { getFieldDecorator } = this.props.form; // eslint-disable-line
-//                 return (
-//                     <Row key={key}>
-//                         <Form.Item label={`${name}-${key}`} {...formItemLayout}>
-//                             {getFieldDecorator(`${name}-${key}`)(<Input />)}
-//                         </Form.Item>
-//                     </Row>
-//                 );
-//             });
-//             return (
-//                 <Col span={4} key={name}>
-//                     <Card title={`Form${name}`}>
-//                         {fields}
-//                     </Card>
-//                 </Col>
-//             );
-//         });
-//         return (
-//             <Form>
-//                 <Row gutter={8}>
-//                     {subForms}
-//                 </Row>
-//             </Form>
-//         );
-//     }
-// }
-
-// export default Form.create()(MyForm);

@@ -3,16 +3,13 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Col, Row } from 'antd';
 import { getValueFromEvent, normalizeValidateTrigger } from './utils';
+import rules from './rules';
 
 export default class FormItem extends React.Component {
     static contextTypes = {
         register: PropTypes.func.isRequired,
         unregister: PropTypes.func.isRequired,
         vertical: PropTypes.bool,
-        validateState: PropTypes.func.isRequired,
-        // components: PropTypes.objectOf(PropTypes.any),
-        // errors: PropTypes.objectOf(PropTypes.array),
-        // validateError: PropTypes.objectOf(PropTypes.any),
     };
 
     constructor(props, context) {
@@ -21,6 +18,7 @@ export default class FormItem extends React.Component {
         this.state = {
             value: this.props.value,
             validateStatus: undefined,
+            explain: undefined,
         };
 
         context.register(this);
@@ -38,13 +36,65 @@ export default class FormItem extends React.Component {
         this.context.unregister(this);
     }
 
+
     onCollect = (event) => {
         const value = getValueFromEvent(event);
-        this.context.validateState(this.props.id, value, this.props.rules);
+        const result = this.validateValue(value);
+        this.setState({
+            validateStatus: result[0],
+            explain: result[1],
+            value,
+        });
     };
 
     onValidate = (event) => {
-        console.log(event); // eslint-disable-line
+        const value = getValueFromEvent(event);
+        const result = this.validateValue(value);
+        this.setState({
+            validateStatus: result[0],
+            explain: result[1],
+        });
+    }
+
+    getUserHandle = (trigger, ownHandle) => {
+        if (this.props.children.props[trigger]) {
+            return (event) => {
+                ownHandle(event);
+                this.props.children.props[trigger](event);
+            };
+        }
+        return ownHandle;
+    }
+
+    validate = () => {
+        const result = this.validateValue(this.state.value);
+        this.setState({
+            validateStatus: result[0],
+            explain: result[1],
+        });
+        return result[1];
+    }
+
+    validateValue = (value) => {
+        const validateRules = this.props.rules;
+        for (let i = 0; i < validateRules.length; i += 1) {
+            const rule = validateRules[i];
+            if (rules[rule.name]) {
+                const status = rules[rule.name](value);
+                if (status) {
+                    return ['error', rule.message || ''];
+                }
+            } else if (rule.validator) {
+                /* TODO: support return promise */
+                const msg = rule.validator(value);
+                if (msg == null) {
+                    return ['success'];
+                }
+                return ['error', msg || ''];
+            }
+        }
+
+        return ['success'];
     }
 
     renderLabel = () => {
@@ -53,7 +103,7 @@ export default class FormItem extends React.Component {
 
         /* TODO: get require rule */
         // const required = this.isRequired();
-        const required = true;
+        const required = false;
 
         const className = classNames({
             [`${prefixCls}-item-required`]: required,
@@ -80,7 +130,7 @@ export default class FormItem extends React.Component {
 
     render() {
         const { prefixCls, label, wrapperCol, children, id, hasFeedback, style, trigger, valuePropName } = this.props;
-        const { value } = this.state;
+        const { value, explain } = this.state;
 
         const validateStatus = this.props.validateStatus || this.state.validateStatus;
 
@@ -93,16 +143,21 @@ export default class FormItem extends React.Component {
             'is-validating': validateStatus === 'validating',
         });
 
+        const itemClassName = classNames({
+            [`${prefixCls}-item`]: true,
+            [`${prefixCls}-item-with-help`]: explain != null && explain !== '',
+        });
+
         const childrenProps = {
             size: 'large',
             id,
         };
 
         childrenProps[valuePropName] = value;
-        childrenProps[trigger] = this.onCollect;
+        childrenProps[trigger] = this.getUserHandle(trigger, this.onCollect);
 
         const validateTrigger = normalizeValidateTrigger(this.props.validateTrigger).filter(tr => tr !== trigger);
-        validateTrigger.forEach((tr) => { childrenProps[tr] = this.onValidate; });
+        validateTrigger.forEach((tr) => { childrenProps[tr] = this.getUserHandle(trigger, this.onValidate); });
 
         return label ? (
             <Row className={`${prefixCls}-item`} style={style}>
@@ -112,8 +167,13 @@ export default class FormItem extends React.Component {
                 </Col>
             </Row>
         ) : (
-            <div className={className}>
-                {React.cloneElement(children, childrenProps)}
+            <div className={itemClassName}>
+                <div className={className}>
+                    {React.cloneElement(children, childrenProps)}
+                    {
+                        explain != null && <div className={`${prefixCls}-explain`}>{explain}</div>
+                    }
+                </div>
             </div>
         );
     }

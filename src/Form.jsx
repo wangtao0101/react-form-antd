@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import 'antd/lib/form/style/css';
 import classNames from 'classnames';
 import invariant from 'invariant';
-import rules from './rules';
+
+import 'antd/lib/form/style/css';
 
 export default class Form extends Component {
     static childContextTypes = {
         register: PropTypes.func.isRequired,
         unregister: PropTypes.func.isRequired,
         vertical: PropTypes.bool,
-        validateState: PropTypes.func.isRequired,
-        // errors: PropTypes.objectOf(PropTypes.array),
-        // validateError: PropTypes.objectOf(PropTypes.any),
     };
 
     constructor(props) {
@@ -31,10 +28,6 @@ export default class Form extends Component {
             register: this.register,
             unregister: this.unregister,
             vertical: this.props.layout === 'vertical',
-            validateState: this.validateState,
-            // components: this.components,
-            // errors: this.state.errors,
-            // validateError: this.state.validateError,
         };
     }
 
@@ -42,36 +35,16 @@ export default class Form extends Component {
         // this.validateState();
     }
 
-    // getErrors = () => Object.keys(this.components).reduce((prev, name) => {
-    //     const component = this.components[name];
-    //     const validations = component.props.validations;
-    //     const length = validations.length;
-
-    //     for (let i = 0; i < length; i += 1) {
-    //         if (!rules[validations[i]].rule(component.state.value, this.components)) {
-    //             /* eslint-disable */
-    //             prev[name] = prev[name] || [];
-    //             prev[name].push(validations[i]);
-    //             /* eslint-enable */
-    //         }
-    //     }
-
-    //     return prev;
-    // }, {});
-
-    // getValidationError = () => Object.keys(this.components).reduce((prev, name) => {
-    //     const component = this.components[name];
-    //     const validateFuntion = component.props.validateFuntion;
-    //     let error;
-
-    //     if (validateFuntion && (typeof validateFuntion === 'function')) {
-    //         error = validateFuntion(component.state.value);
-    //         if (error !== null && error !== undefined) {
-    //             prev[name] = error; // eslint-disable-line
-    //         }
-    //     }
-    //     return prev;
-    // }, {});
+    getValue(name) {
+        const result = {};
+        if (!name) {
+            Object.keys(this.components).forEach((n) => {
+                result[n] = this.components[n].state.value;
+            });
+            return result;
+        }
+        return this.components[name].state.value;
+    }
 
     register = (component) => {
         invariant(typeof component.props.id === 'string', 'should add id props for FormItem');
@@ -84,68 +57,19 @@ export default class Form extends Component {
         delete this.components[component.props.id];
     };
 
-    validateState = (name, value, validateRules) => {
-        let validateStatus;
-        for (let i = 0; i < validateRules.length; i += 1) {
-            const rule = validateRules[i];
-            if (rules[rule.name]) {
-                const status = rules[rule.name](value);
-                if (status) {
-                    validateStatus = 'error';
-                    break;
+    validate(name) {
+        if (!name) {
+            const result = {};
+            Object.keys(this.components).forEach((n) => {
+                const r = this.components[n].validate();
+                if (r != null) {
+                    result[n] = r;
                 }
-            }
+            });
+            return result;
         }
-
-        this.components[name].setState({
-            value,
-            validateStatus,
-        });
+        return this.components[name].validate();
     }
-
-    // validate = (name) => {
-    //     this.components[name].setState({
-    //         isUsed: true,
-    //         isChanged: true,
-    //     }, this.validateState);
-    // };
-
-    // validateAll() {
-    //     Object.keys(this.components).forEach((name) => {
-    //         this.components[name].setState({
-    //             isUsed: true,
-    //             isChanged: true,
-    //         });
-    //     });
-
-    //     const errors = this.getErrors();
-    //     const validateError = this.getValidationError();
-
-    //     this.setState({ errors, validateError });
-    //     return Object.assign(errors, validateError);
-    // }
-
-    // showError = (name, error) => {
-    //     this.components[name].setState({
-    //         isUsed: true,
-    //         isChanged: true,
-    //     }, () => {
-    //         this.setState({
-    //             errors: {
-    //                 ...this.state.errors,
-    //                 [name]: [error],
-    //             },
-    //         });
-    //     });
-    // };
-
-    // hideError = (name) => {
-    //     const errors = Object.assign({}, this.state.errors);
-
-    //     delete errors[name];
-
-    //     this.setState({ errors });
-    // };
 
     render() {
         const { prefixCls, layout, children, className, ...restProps } = this.props;
