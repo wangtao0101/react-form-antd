@@ -50,6 +50,31 @@ export default class TestInputNumber extends React.Component { // eslint-disable
                             }}
                         />
                     </FormItem>
+                    <FormItem
+                        id="disable"
+                        rules={[{
+                            name: 'required',
+                            message: 'email is required',
+                        }, {
+                            validator: (value) => {
+                                if (value > 5) {
+                                    return 'too too long';
+                                }
+                                return null;
+                            },
+                        }]}
+                        // value={}
+                        disabled
+                    >
+                        <InputNumber
+                            min={1}
+                            max={10}
+                            step={1}
+                            onChange={(v) => {
+                                console.log(v); // eslint-disable-line
+                            }}
+                        />
+                    </FormItem>
                     <Button
                         onClick={() => {
                             console.log(this.form.validate()); // eslint-disable-line

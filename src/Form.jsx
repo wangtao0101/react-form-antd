@@ -59,6 +59,9 @@ export default class Form extends Component {
         if (!name) {
             const result = {};
             Object.keys(this.components).forEach((n) => {
+                if (this.components[n].props.disabled) {
+                    return;
+                }
                 const r = this.components[n].validate();
                 if (r != null) {
                     result[n] = r;

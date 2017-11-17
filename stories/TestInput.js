@@ -76,6 +76,31 @@ export default class TestInput extends React.Component { // eslint-disable-line
                             onChange={() => console.log('safadf')} // eslint-disable-line
                         />
                     </FormItem>
+                    <FormItem
+                        id="email3"
+                        hasFeedback
+                        rules={[{
+                            name: 'min',
+                            args: 5,
+                            message: 'min',
+                        }, {
+                            name: 'max',
+                            args: 10,
+                            message: 'max',
+                        }, {
+                            name: 'required',
+                            message: 'email is required',
+                        }]}
+                        value=""
+                        validateTrigger="onBlur"
+                    >
+                        <Input
+                            prefix={<Icon type="mail" style={{ fontSize: 13 }} />}
+                            placeholder="Email"
+                            type="email"
+                            onChange={() => console.log('safadf')} // eslint-disable-line
+                        />
+                    </FormItem>
                     <Button
                         onClick={() => {
                             this.form.validate();

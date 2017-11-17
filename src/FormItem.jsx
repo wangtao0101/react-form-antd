@@ -80,7 +80,7 @@ export default class FormItem extends React.Component {
         for (let i = 0; i < validateRules.length; i += 1) {
             const rule = validateRules[i];
             if (rules[rule.name]) {
-                const status = rules[rule.name](value);
+                const status = rules[rule.name](value, rule.args);
                 if (status) {
                     return ['error', rule.message || ''];
                 }
@@ -129,7 +129,10 @@ export default class FormItem extends React.Component {
     }
 
     render() {
-        const { prefixCls, label, wrapperCol, children, id, hasFeedback, style, trigger, valuePropName } = this.props;
+        const {
+            prefixCls, label, wrapperCol, children, id, hasFeedback, style, trigger, valuePropName, disabled,
+        } = this.props;
+
         const { value, explain } = this.state;
 
         const validateStatus = this.props.validateStatus || this.state.validateStatus;
@@ -137,19 +140,20 @@ export default class FormItem extends React.Component {
         const className = classNames({
             [`${prefixCls}-item-control`]: true,
             'has-feedback': hasFeedback,
-            'has-success': validateStatus === 'success',
-            'has-warning': validateStatus === 'warning',
-            'has-error': validateStatus === 'error',
-            'is-validating': validateStatus === 'validating',
+            'has-success': validateStatus === 'success' && !disabled,
+            'has-warning': validateStatus === 'warning' && !disabled,
+            'has-error': validateStatus === 'error' && !disabled,
+            'is-validating': validateStatus === 'validating' && !disabled,
         });
 
         const itemClassName = classNames({
             [`${prefixCls}-item`]: true,
-            [`${prefixCls}-item-with-help`]: explain != null && explain !== '',
+            [`${prefixCls}-item-with-help`]: !disabled && explain != null && explain !== '',
         });
 
         const childrenProps = {
             id,
+            disabled,
         };
 
         childrenProps[valuePropName] = value;
@@ -170,7 +174,7 @@ export default class FormItem extends React.Component {
                 <div className={className}>
                     {React.cloneElement(children, childrenProps)}
                     {
-                        explain != null && <div className={`${prefixCls}-explain`}>{explain}</div>
+                        !disabled && explain != null && <div className={`${prefixCls}-explain`}>{explain}</div>
                     }
                 </div>
             </div>
@@ -193,6 +197,7 @@ FormItem.defaultProps = {
     getValueFromEvent,
     validateTrigger: undefined,
     rules: [],
+    disabled: false,
 };
 
 FormItem.propTypes = {
@@ -215,6 +220,7 @@ FormItem.propTypes = {
         PropTypes.arrayOf(PropTypes.string),
     ]),
     rules: PropTypes.array,
+    disabled: PropTypes.bool,
     // value: PropTypes.string.isRequired,
     // name: PropTypes.string.isRequired,
     // onChange: PropTypes.func,
@@ -226,7 +232,7 @@ FormItem.propTypes = {
        (done) trigger 收集子节点的值的时机 string 'onChange'
        (done) getValueFromEvent 可以把 onChange 的参数（如 event）转化为控件的值 function(..args) reference
        (done) validateTrigger 校验子节点值的时机 string|string[] 'onChange'
-       rules 校验规则，参考下方文档 object[]
+       (done) rules 校验规则，参考下方文档 object[]
        validateFirst 当某一规则校验不通过时，是否停止剩下的规则的校验 boolean false
        exclusive 是否和其他控件互斥，特别用于 Radio 单选控件 boolean false
        normalize 转换默认的 value 给控件，一个选择全部的例子 function(value, prevValue, allValues): any -
