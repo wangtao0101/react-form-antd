@@ -41,6 +41,6 @@ describe('FormItem register component in Form', () => {
                         <Input />
                     </FormItem>
                 </Form>);
-        }).toThrow(/id props of all FormItems in same Form should be unique/);
+        }).toThrow(/id props of all FormItems in same Form should be unique, please check id test/);
     });
 });
