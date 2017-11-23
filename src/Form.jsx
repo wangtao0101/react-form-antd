@@ -81,6 +81,7 @@ export default class Form extends Component {
             });
             return result;
         }
+        invariant(this.components[name], `component with id: ${name} is not exist in form.`);
         return this.components[name].validate();
     }
 
