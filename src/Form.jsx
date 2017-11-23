@@ -47,6 +47,7 @@ export default class Form extends Component {
 
     setValue(name, value) {
         if (typeof name === 'string') {
+            invariant(this.components[name], `component with id: ${name} is not exist in form.`);
             this.components[name].setValue(value);
             return;
         }
