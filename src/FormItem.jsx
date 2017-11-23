@@ -5,6 +5,13 @@ import { Col, Row } from 'antd';
 import { getValueFromEvent, normalizeValidateTrigger } from './utils';
 import rules from './rules';
 
+const nomolizeValue = (value, initValue) => {
+    if (value !== undefined) {
+        return value;
+    }
+    return initValue;
+};
+
 export default class FormItem extends React.Component {
     static contextTypes = {
         register: PropTypes.func.isRequired,
@@ -16,7 +23,7 @@ export default class FormItem extends React.Component {
         super(props, context);
 
         this.state = {
-            value: this.props.value || this.props.initValue,
+            value: nomolizeValue(props.value, props.initValue),
             validateStatus: undefined,
             explain: undefined,
         };
