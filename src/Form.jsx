@@ -57,7 +57,7 @@ export default class Form extends Component {
     register = (component) => {
         invariant(typeof component.props.id === 'string', 'should add id props for FormItem');
         invariant(this.components[component.props.id] === undefined,
-            'id props of all FormItems in same Form should be unique');
+            `id props of all FormItems in same Form should be unique, please check id ${component.props.id}`);
         this.components[component.props.id] = component;
     };
 
