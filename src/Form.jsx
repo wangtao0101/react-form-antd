@@ -44,6 +44,16 @@ export default class Form extends Component {
         return this.components[name].state.value;
     }
 
+    setValue(name, value) {
+        if (typeof name === 'string') {
+            this.components[name].setValue(value);
+            return;
+        }
+        Object.keys(name).forEach((n) => {
+            this.components[n].setValue(name[n]);
+        });
+    }
+
     register = (component) => {
         invariant(typeof component.props.id === 'string', 'should add id props for FormItem');
         invariant(this.components[component.props.id] === undefined,
