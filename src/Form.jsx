@@ -106,7 +106,7 @@ export default class Form extends Component {
 Form.defaultProps = {
     prefixCls: 'ant-form',
     layout: 'horizontal',
-    className: {},
+    className: '',
 };
 
 Form.propTypes = {
