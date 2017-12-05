@@ -113,5 +113,5 @@ Form.propTypes = {
     children: PropTypes.any.isRequired,
     prefixCls: PropTypes.string,
     layout: PropTypes.oneOf(['horizontal', 'inline', 'vertical']),
-    className: PropTypes.object,
+    className: PropTypes.string,
 };
