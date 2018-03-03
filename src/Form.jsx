@@ -41,7 +41,19 @@ export default class Form extends Component {
             });
             return result;
         }
+        invariant(this.components[name], `component with id: ${name} is not exist in form.`);
         return this.components[name].state.value;
+    }
+
+    setValue(name, value) {
+        if (typeof name === 'string') {
+            invariant(this.components[name], `component with id: ${name} is not exist in form.`);
+            this.components[name].setValue(value);
+            return;
+        }
+        Object.keys(name).forEach((n) => {
+            this.components[n].setValue(name[n]);
+        });
     }
 
     register = (component) => {
@@ -69,6 +81,7 @@ export default class Form extends Component {
             });
             return result;
         }
+        invariant(this.components[name], `component with id: ${name} is not exist in form.`);
         return this.components[name].validate();
     }
 
@@ -93,12 +106,12 @@ export default class Form extends Component {
 Form.defaultProps = {
     prefixCls: 'ant-form',
     layout: 'horizontal',
-    className: {},
+    className: '',
 };
 
 Form.propTypes = {
     children: PropTypes.any.isRequired,
     prefixCls: PropTypes.string,
     layout: PropTypes.oneOf(['horizontal', 'inline', 'vertical']),
-    className: PropTypes.object,
+    className: PropTypes.string,
 };

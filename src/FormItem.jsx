@@ -5,6 +5,13 @@ import { Col, Row } from 'antd';
 import { getValueFromEvent, normalizeValidateTrigger } from './utils';
 import rules from './rules';
 
+const nomolizeValue = (value, initValue) => {
+    if (value !== undefined) {
+        return value;
+    }
+    return initValue;
+};
+
 export default class FormItem extends React.Component {
     static contextTypes = {
         register: PropTypes.func.isRequired,
@@ -16,7 +23,7 @@ export default class FormItem extends React.Component {
         super(props, context);
 
         this.state = {
-            value: this.props.value,
+            value: nomolizeValue(props.value, props.initValue),
             validateStatus: undefined,
             explain: undefined,
         };
@@ -64,6 +71,12 @@ export default class FormItem extends React.Component {
             };
         }
         return ownHandle;
+    }
+
+    setValue = (value) => {
+        this.setState({
+            value,
+        });
     }
 
     validate = () => {
@@ -191,7 +204,8 @@ FormItem.defaultProps = {
     hasFeedback: false,
     validateStatus: undefined,
     style: {},
-    value: '',
+    value: undefined,
+    initValue: undefined,
     trigger: 'onChange',
     valuePropName: 'value',
     getValueFromEvent,
@@ -212,6 +226,7 @@ FormItem.propTypes = {
     validateStatus: PropTypes.oneOf(['', 'success', 'warning', 'error', 'validating']),
     style: PropTypes.object,
     value: PropTypes.any,
+    initValue: PropTypes.any,
     trigger: PropTypes.string,
     valuePropName: PropTypes.string,
     getValueFromEvent: PropTypes.func,

@@ -4,16 +4,34 @@
         "react",
         "stage-0",
     ],
-    "plugins": [
-      [
-        "import",
-        [
-          {
-            "libraryName": "antd",
-            "libraryDirectory": "lib",
-            "style": "css"
-          }
-        ]
-      ],
-    ],
+    "env": {
+        "production": {
+            "plugins": [
+                [
+                    "import",
+                    [
+                        {
+                            "libraryName": "antd",
+                            "libraryDirectory": "lib",
+                            "style": false
+                        }
+                    ]
+                ],
+            ],
+        },
+        "development": {
+            "plugins": [
+                [
+                    "import",
+                    [
+                        {
+                            "libraryName": "antd",
+                            "libraryDirectory": "lib",
+                            "style": "css"
+                        }
+                    ]
+                ],
+            ],
+        }
+    }
 }
