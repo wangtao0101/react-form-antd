@@ -24,13 +24,13 @@ export default class FormItem extends React.Component {
         context.register(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.value !== this.props.value) {
-            this.setState({
-                value: nextProps.value,
-            });
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.value !== this.props.value) {
+    //         this.setState({
+    //             value: nextProps.value,
+    //         });
+    //     }
+    // }
 
     componentWillUnmount() {
         this.context.unregister(this);
