@@ -5,13 +5,6 @@ import { Col, Row } from 'antd';
 import { getValueFromEvent, normalizeValidateTrigger } from './utils';
 import rules from './rules';
 
-const nomolizeValue = (value, initValue) => {
-    if (value !== undefined) {
-        return value;
-    }
-    return initValue;
-};
-
 export default class FormItem extends React.Component {
     static contextTypes = {
         register: PropTypes.func.isRequired,
@@ -23,7 +16,7 @@ export default class FormItem extends React.Component {
         super(props, context);
 
         this.state = {
-            value: nomolizeValue(props.value, props.initValue),
+            value: props.value,
             validateStatus: undefined,
             explain: undefined,
         };
@@ -31,13 +24,16 @@ export default class FormItem extends React.Component {
         context.register(this);
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     if (nextProps.value !== this.props.value) {
-    //         this.setState({
-    //             value: nextProps.value,
-    //         });
-    //     }
-    // }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.children.props[nextProps.trigger]) {
+            // 如果表单项添加了Trigger，那么表单项直接变为受控组件
+            if (nextProps.value !== this.props.value) {
+                this.setState({
+                    value: nextProps.value,
+                });
+            }
+        }
+    }
 
     componentWillUnmount() {
         this.context.unregister(this);
@@ -205,7 +201,6 @@ FormItem.defaultProps = {
     validateStatus: undefined,
     style: {},
     value: undefined,
-    initValue: undefined,
     trigger: 'onChange',
     valuePropName: 'value',
     getValueFromEvent,
@@ -226,7 +221,6 @@ FormItem.propTypes = {
     validateStatus: PropTypes.oneOf(['', 'success', 'warning', 'error', 'validating']),
     style: PropTypes.object,
     value: PropTypes.any,
-    initValue: PropTypes.any,
     trigger: PropTypes.string,
     valuePropName: PropTypes.string,
     getValueFromEvent: PropTypes.func,
