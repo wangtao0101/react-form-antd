@@ -172,10 +172,13 @@ export default class FormItem extends React.Component {
         validateTrigger.forEach((tr) => { childrenProps[tr] = this.getUserHandle(trigger, this.onValidate); });
 
         return label ? (
-            <Row className={`${prefixCls}-item`} style={style}>
+            <Row className={itemClassName} style={style}>
                 {this.renderLabel()}
                 <Col className={className} {...wrapperCol}>
                     {React.cloneElement(children, childrenProps)}
+                    {
+                        !disabled && explain != null && <div className={`${prefixCls}-explain`}>{explain}</div>
+                    }
                 </Col>
             </Row>
         ) : (

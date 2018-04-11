@@ -93,6 +93,7 @@ export default class TestInput extends React.Component { // eslint-disable-line
                         }]}
                         value=""
                         validateTrigger="onBlur"
+                        label="afsdf"
                     >
                         <Input
                             prefix={<Icon type="mail" style={{ fontSize: 13 }} />}
